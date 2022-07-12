@@ -3,7 +3,9 @@ import { selectWalletProvider } from './wallets';
 
 const API_KEY = ''; // Blockfrost API Key;
 
-export const handleAdaTransfer = async () => {
+// TODO:
+// async (addr, amt, network, walletProvider) => 
+export const handleAdaTransfer = async (addr, amt, network, walletProvider) => {
   console.log("YAY!")
   const addr = (document.getElementById('addr-input'))
     ?.value;
