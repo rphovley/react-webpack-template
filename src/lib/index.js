@@ -1,21 +1,11 @@
 import { networkName, Transferer } from './transferer';
+import {AssetManager} from './asset_manager';
 import { selectWalletProvider } from './wallets';
-
-const API_KEY = ''; // Blockfrost API Key;
+import api_key from '../../api_key.json'
 
 // TODO:
 // async (addr, amt, network, walletProvider) => 
 export const handleAdaTransfer = async (addr, amt, network, walletProvider) => {
-  console.log("YAY!")
-  const addr = (document.getElementById('addr-input'))
-    ?.value;
-  const amt = (document.getElementById('snd-amt'))?.value;
-  const network = (document.getElementById('network'))
-    ?.value;
-  const walletProvider = (document.getElementById(
-    'wallet-provider'
-  ))?.value;
-
   if (!addr) {
     window.alert('A valid Cardano Testnet address must be provided.');
     return;
@@ -28,7 +18,7 @@ export const handleAdaTransfer = async (addr, amt, network, walletProvider) => {
 
   try {
     const wProvider = await selectWalletProvider(walletProvider);
-    const transferer = new Transferer(networkName(network), wProvider, API_KEY);
+    const transferer = new Transferer(networkName(network), wProvider, api_key.BLOCKFROST);
     console.log(`Sending ${amt} ADA to addr: ${addr}`);
     const txHash = await transferer.sendAda(addr, Number(amt));
     window.alert(`Transfer succesfully submitted! TxHash: ${txHash}`);
@@ -38,3 +28,9 @@ export const handleAdaTransfer = async (addr, amt, network, walletProvider) => {
   }
 };
 
+export const getBalance = async (network, walletProvider) => {
+  const wProvider = await selectWalletProvider(walletProvider);
+  const aManager = new AssetManager(networkName(network), wProvider, api_key.BLOCKFROST);
+  const balance = aManager.getBalance();
+  return balance
+}
