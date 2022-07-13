@@ -1,4 +1,5 @@
 import { networkName, Transferer } from './transferer';
+import {AssetManager} from './asset_manager';
 import { selectWalletProvider } from './wallets';
 import api_key from '../../api_key.json'
 
@@ -27,3 +28,9 @@ export const handleAdaTransfer = async (addr, amt, network, walletProvider) => {
   }
 };
 
+export const getBalance = async (network, walletProvider) => {
+  const wProvider = await selectWalletProvider(walletProvider);
+  const aManager = new AssetManager(networkName(network), wProvider, api_key.BLOCKFROST);
+  const balance = aManager.getBalance();
+  return balance
+}
